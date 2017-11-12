@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">Otzovik</string>
+    <!--<string name="title_activity_place_detaPlaceDetailFragmentvity</string>-->
+    <string name="title_activity_list_of_places">ListOfPlaces</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sit amet dapibus quam. Proin nec sapien sit amet magna sodales fermentum. Nullam semper sit amet mauris at eleifend. Sed nisi neque, malesuada eu purus volutpat, condimentum faucibus nisl. Sed vel metus ultrices, elementum mauris vitae, finibus enim. Quisque dolor est, porttitor a ultrices ut, porttitor ut mauris. Etiam vulputate, purus non efficitur elementum, neque dolor semper ex, non faucibus mauris turpis in ex. Aliquam nec tempus ipsum. Duis fermentum justo augue, ac ultrices lacus pellentesque a. Suspendisse enim ante, gravida ac semper id, molestie quis sem. Cras vehicula metus metus, non placerat odio vulputate id.
+
+Quisque cursus tincidunt massa. </string>
+    <string name="place_title_text_view">Название</string>
+    <string name="place_phone_text_view">Номер телефона</string>
+    <string name="place_adress_text_view">Адрес</string>
+    <string name="place_rating_text_view">Рейтинг</string>
+    <string name="place_work_time_text_view">Время работы</string>
+    <string name="place_type">Тип заведения</string>
+    <string name="null_description">Заполнены не все поля!</string>
+    <string name="choose_place_type">Выберите тип заведения из списка</string>
+    <string-array name="choose_place_type">
+        <item name="cafe">Кафе</item>
+        <item name="cinema">Кинотеатр</item>
+        <item name="bar">Бар</item>
+        <item name="restaurant">Ресторан</item>
+        <item name="club">Клуб</item>
+        <item name="theater">Театр</item>
+    </string-array>
+    <string name="wrong_rating">Рейтинг должен равняться значению от 0 до 5.</string>
+    <string name="add_place">Добавить</string>
+    <string name="ok">OK</string>
+    <string name="add_tofavorite">добавлен в "Любимые"</string>
+    <string name="remove_tofavorite"> удален из "Любимых"</string>
+
+
+    <plurals name="fav_places_count">
+        <item quantity="one">%1$d любимое место</item>
+        <item quantity="other">%1$d любимых места</item>
+    </plurals>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="favourite_places">Любимые места</string>
+    <string name="all_places">Все заведения</string>
+</resources>
