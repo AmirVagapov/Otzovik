@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,10 @@ public class PlaceDetailFragment extends Fragment {
         setRetainInstance(true);
         if (getArguments() != null) {
             UUID uuid = (UUID) getArguments().getSerializable(SEND_ID);
-            place = PlaceList.getOurInstance().getPlaceById(uuid);
+            Log.d("ttta", uuid.toString());
+            place = PlaceList.getOurInstance(getContext()).getPlaceById(uuid);
+            Log.d("tttaa", place.getTitle());
+
         }
         super.onCreate(savedInstanceState);
     }

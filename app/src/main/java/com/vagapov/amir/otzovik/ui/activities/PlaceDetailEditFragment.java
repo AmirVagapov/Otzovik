@@ -67,7 +67,7 @@ public class PlaceDetailEditFragment extends Fragment {
 
         if (getArguments() != null) {
             uuid = (UUID) getArguments().getSerializable(SEND_ID);
-            place = PlaceList.getOurInstance().getPlaceById(uuid);
+            place = PlaceList.getOurInstance(getContext()).getPlaceById(uuid);
         }
     }
 
@@ -83,10 +83,11 @@ public class PlaceDetailEditFragment extends Fragment {
             public void onClick(View v) {
                 if (checkOnNull() && place != null) {
                     setPlaceDescription();
+                    PlaceList.getOurInstance(getContext()).updatePlace(place);
                     //callBackActivity.onListReturn();
                     getActivity().getSupportFragmentManager().beginTransaction().remove(PlaceDetailEditFragment.this).commit();
                 } else if (checkOnNull()) {
-                    PlaceList.getOurInstance().getPlace().add(new Place(titleEditText.getText().toString(),
+                    PlaceList.getOurInstance(getContext()).addPlace(new Place(titleEditText.getText().toString(),
                             adressEditText.getText().toString(), phoneEditText.getText().toString(),
                             worktimeEditText.getText().toString(), ratingEditText.getText().toString(),
                             choosePlaceTypeSpinner.getSelectedItem().toString(), descriptionEditText.getText().toString()));

@@ -1,25 +1,37 @@
 package com.vagapov.amir.otzovik.model;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.CursorWrapper;
+import android.database.sqlite.SQLiteDatabase;
+
 import com.vagapov.amir.otzovik.R;
+import com.vagapov.amir.otzovik.database.DBSchema;
+import com.vagapov.amir.otzovik.database.PlaceCursorWrapper;
+import com.vagapov.amir.otzovik.database.PlaceOpenHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static com.vagapov.amir.otzovik.database.DBSchema.DBTable.Columns.*;
+
 
 public class PlaceList {
 
     private static PlaceList ourInstance = null;
-
+    private SQLiteDatabase mDatabase;
     private List<Place> places;
 
-    private PlaceList() {
+    private PlaceList(Context context) {
         initPlacesList();
+        mDatabase = new PlaceOpenHelper(context).getWritableDatabase();
     }
 
-    public static PlaceList getOurInstance() {
+    public static PlaceList getOurInstance(Context context) {
         if (ourInstance == null) {
-            ourInstance = new PlaceList();
+            ourInstance = new PlaceList(context);
             return ourInstance;
         } else {
             return ourInstance;
@@ -27,23 +39,29 @@ public class PlaceList {
 
     }
 
-    public List<Place> getPlace() {
-        return places;
-    }
 
     public List<Place> getFavoritePlaces(){
-        List<Place> favPlaces = new ArrayList<>();
-        for(Place place : places){
-            if(place.isAddToFavourite()){
-                favPlaces.add(place);
+        PlaceCursorWrapper cursor = queryPlaces(FAVORITE + " = ?", new String[]{"1"});
+        List<Place> places = new ArrayList<>();
+
+        try {
+            if(cursor.getCount() == 0){
+                return null;
             }
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()){
+                places.add(cursor.getPlace());
+                cursor.moveToNext();
+            }
+        }finally {
+            cursor.close();
         }
-        return favPlaces;
+        return places;
     }
 
 
     private void initPlacesList() {
-        places = new ArrayList<>();
+       /* places = new ArrayList<>();
 
         places.add(new Place("Harat's", "г. Уфа, Верхнеторговая площадь, д. 1",
                 "2376970", "12:00 - 06:00", "5", "Бар", "Ирландский паб", R.drawable.harats));
@@ -60,16 +78,76 @@ public class PlaceList {
         places.add(new Place("Music Hall 27", "г. Уфа, ул. Кирова, д. 27",
                 "2376943", "12:00 - 06:00", "5", "Клуб", "Ресторан. Клуб", R.drawable.musichall));
         places.add(new Place("Gastro Gallery", "г. Уфа, ул. Ленина, д. 16",
-                "2542311", "10:00 - 04:00", "3", "Ресторан", "Ресторан", R.drawable.gastro));
+                "2542311", "10:00 - 04:00", "3", "Ресторан", "Ресторан", R.drawable.gastro));*/
 
     }
 
     public Place getPlaceById(UUID id){
-        for(Place place : places){
-            if(place.getPlaceId().equals(id)){
-                return place;
+        String uuid = id.toString();
+        PlaceCursorWrapper cursor = queryPlaces(UUID + " = ?", new String[]{uuid});
+        try {
+            if(cursor.getCount() == 0){
+                return  null;
             }
+            cursor.moveToFirst();
+
+            return cursor.getPlace();
+        } finally {
+            cursor.close();
         }
-        return null;
+
     }
+
+    public ArrayList<Place> getPlaces(){
+        PlaceCursorWrapper cursor = queryPlaces(null, null);
+        ArrayList<Place> places = new ArrayList<>();
+        try {
+            if(cursor.getCount() == 0){
+                return null;
+            }
+
+            cursor.moveToFirst();
+            while(!cursor.isAfterLast()){
+                places.add(cursor.getPlace());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+        return places;
+    }
+
+    private static ContentValues getContentValues(Place place){
+        ContentValues values = new ContentValues();
+        values.put(UUID, place.getPlaceId().toString());
+        values.put(PLACE_NAME, place.getTitle());
+        values.put(ADRESS, place.getAdress());
+        values.put(PHONE_NUMBER, place.getTelephone());
+        values.put(WORKTIME, place.getWorkTime());
+        values.put(RATING, place.getRating());
+        values.put(PLACE_TYPE, place.getPlaceType());
+        values.put(DESCRIPTION, place.getDescription());
+        values.put(FAVORITE, place.isAddToFavourite() ? 1 : 0);
+        return values;
+    }
+
+    private PlaceCursorWrapper queryPlaces(String whereClause, String[] whereArgs){
+        Cursor cursor = mDatabase.query(DBSchema.DBTable.TABLE_NAME, null, whereClause, whereArgs,
+                null, null, null);
+        return new PlaceCursorWrapper(cursor);
+    }
+
+    public void addPlace(Place place){
+        ContentValues values = getContentValues(place);
+        mDatabase.insert(DBSchema.DBTable.TABLE_NAME, null, values);
+    }
+
+    public void updatePlace(Place place){
+        ContentValues values = getContentValues(place);
+        String id = place.getPlaceId().toString();
+        mDatabase.update(DBSchema.DBTable.TABLE_NAME, values, UUID
+                +  " = ?", new String[]{id});
+    }
+
+
 }

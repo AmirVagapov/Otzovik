@@ -12,11 +12,7 @@ public class Place {
     private String rating;
     private String placeType;
     private String description;
-
-
-
     private UUID placeId;
-
 
 
     private boolean addToFavourite;
@@ -27,7 +23,7 @@ public class Place {
     // TODO: 15.10.2017 Добавить координаты
 
     public Place(String title, String adress, String telephone, String workTime,
-                 String rating, String placeType, String description) {
+                 String rating, String placeType, String description, UUID id) {
         this.title = title;
         this.adress = adress;
         this.telephone = telephone;
@@ -35,8 +31,13 @@ public class Place {
         this.rating = rating;
         this.placeType = placeType;
         this.description = description;
-        placeId = UUID.randomUUID();
+        placeId = id;
         addToFavourite = false;
+    }
+
+    public Place(String title, String adress, String telephone, String workTime,
+                 String rating, String placeType, String description){
+        this(title, adress, telephone, workTime, rating, placeType, description, UUID.randomUUID());
     }
 
     public Place(String title, String adress, String telephone, String workTime,
@@ -120,6 +121,7 @@ public class Place {
     public void setAddToFavourite(boolean addToFavourite) {
         this.addToFavourite = addToFavourite;
     }
+
     public UUID getPlaceId() {
         return placeId;
     }

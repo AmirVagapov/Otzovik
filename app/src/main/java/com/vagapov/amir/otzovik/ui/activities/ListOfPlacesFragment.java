@@ -61,9 +61,9 @@ public class ListOfPlacesFragment extends Fragment {
             case R.id.toolbar_favourite_places:
                 showSubtitle = !showSubtitle;
                 if(showSubtitle) {
-                    updateAdapter(PlaceList.getOurInstance().getFavoritePlaces());
+                    updateAdapter(PlaceList.getOurInstance(getContext()).getFavoritePlaces());
                 }else {
-                    updateAdapter(PlaceList.getOurInstance().getPlace());
+                    updateAdapter(PlaceList.getOurInstance(getContext()).getPlaces());
                 }
                 return true;
             case R.id.all_places:
@@ -103,7 +103,7 @@ public class ListOfPlacesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list_of_places, container, false);
 
-        placeList = PlaceList.getOurInstance().getPlace();
+        placeList = PlaceList.getOurInstance(getContext()).getPlaces();
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         updateAdapter(placeList);
@@ -127,8 +127,9 @@ public class ListOfPlacesFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        updateSubtitle(places);
-
+        if(places != null) {
+            updateSubtitle(places);
+        }
     }
 
 
@@ -168,6 +169,9 @@ public class ListOfPlacesFragment extends Fragment {
             }
             return 0;
         }
+
+
+
     }
 
     private  class PlaceViewHolder extends RecyclerView.ViewHolder {
@@ -194,6 +198,7 @@ public class ListOfPlacesFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     //showSubtitle = false;
+                    Log.d("ttt", mPlace.getPlaceId().toString());
                     callBackActivity.createViewPager(mPlace.getPlaceId());
                 }
             });

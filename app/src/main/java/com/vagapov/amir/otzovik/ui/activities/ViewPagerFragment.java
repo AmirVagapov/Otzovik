@@ -36,9 +36,9 @@ public class ViewPagerFragment extends Fragment {
 
         mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
         if(!ListOfPlacesFragment.showSubtitle) {
-            places = PlaceList.getOurInstance().getPlace();
+            places = PlaceList.getOurInstance(getContext()).getPlaces();
         }else{
-            places = PlaceList.getOurInstance().getFavoritePlaces();
+            places = PlaceList.getOurInstance(getContext()).getFavoritePlaces();
             ListOfPlacesFragment.showSubtitle = false;
         }
 
